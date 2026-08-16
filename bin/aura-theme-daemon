@@ -25,6 +25,7 @@ ACCENT_MAP = {
     "teal": "teal",
     "yellow": "yellow",
     "pink": "pink",
+    "slate": "slate",
 }
 
 class ThemeSyncDaemon:

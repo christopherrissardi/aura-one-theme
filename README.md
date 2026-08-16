@@ -29,19 +29,19 @@
 * 🌘 **One Dark Original Edition**: Classic balanced slate One Dark background (`#282c34` / `#323742`).
 * 🪟 **Refined Glassmorphism Edition**: Translucent glass theme with balanced opacity (80% ~ 88%) designed to pair seamlessly with *Blur My Shell*.
 * ⚡ **Instant Real-Time Synchronization (<20ms)**: Comes with a lightweight background daemon (`aura-theme-daemon`) with **0% CPU usage** that automatically propagates changes in GNOME Tweaks or GNOME Settings directly to Nautilus and all open GTK applications instantly.
-* 🎨 **36 Ready-to-Use Color Variations**: Pre-built packages for 8 accent colors (Purple, Green, Blue, Orange, Red, Teal, Yellow, Pink) plus an Adaptive dynamic mode.
+* 🎨 **40 Ready-to-Use Color Variations**: Pre-built packages for 9 official GNOME accent colors (Slate/Ardósia, Purple, Green, Blue, Orange, Red, Teal, Yellow, Pink) plus an Adaptive dynamic mode.
 * 💻 **Powerful CLI Tool (`switch-theme`)**: Change themes and accent colors on the fly from your terminal or open an interactive TUI menu with live hex color preview!
 
 ---
 
-### 🎨 Theme Variations Matrix
+### 🎨 Theme Variations Matrix (40 Combinations)
 
-| Background Style | Adaptive (GNOME) | 🟣 Purple | 🟢 Green | 🔵 Blue | 🟠 Orange | 🔴 Red | 🌊 Teal | 🟡 Yellow | 🌸 Pink |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **OLED Pure Black** | `Aura-One-OLED` | `...-Purple` | `...-Green` | `...-Blue` | `...-Orange` | `...-Red` | `...-Teal` | `...-Yellow` | `...-Pink` |
-| **Midnight Darker** | `Aura-One-Darker` | `...-Purple` | `...-Green` | `...-Blue` | `...-Orange` | `...-Red` | `...-Teal` | `...-Yellow` | `...-Pink` |
-| **One Dark Classic**| `Aura-One-Dark` | `...-Purple` | `...-Green` | `...-Blue` | `...-Orange` | `...-Red` | `...-Teal` | `...-Yellow` | `...-Pink` |
-| **Glass Translucent**| `Aura-One-Transparent` | `...-Purple` | `...-Green` | `...-Blue` | `...-Orange` | `...-Red` | `...-Teal` | `...-Yellow` | `...-Pink` |
+| Background Style | Adaptive (GNOME) | 🌫️ Slate | 🟣 Purple | 🟢 Green | 🔵 Blue | 🟠 Orange | 🔴 Red | 🌊 Teal | 🟡 Yellow | 🌸 Pink |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **OLED Pure Black** | `Aura-One-OLED` | `...-Slate` | `...-Purple` | `...-Green` | `...-Blue` | `...-Orange` | `...-Red` | `...-Teal` | `...-Yellow` | `...-Pink` |
+| **Midnight Darker** | `Aura-One-Darker` | `...-Slate` | `...-Purple` | `...-Green` | `...-Blue` | `...-Orange` | `...-Red` | `...-Teal` | `...-Yellow` | `...-Pink` |
+| **One Dark Classic**| `Aura-One-Dark` | `...-Slate` | `...-Purple` | `...-Green` | `...-Blue` | `...-Orange` | `...-Red` | `...-Teal` | `...-Yellow` | `...-Pink` |
+| **Glass Translucent**| `Aura-One-Transparent` | `...-Slate` | `...-Purple` | `...-Green` | `...-Blue` | `...-Orange` | `...-Red` | `...-Teal` | `...-Yellow` | `...-Pink` |
 
 ---
 
@@ -68,6 +68,7 @@ The installer installs `switch-theme` directly to your `~/.local/bin/`. You can 
 switch-theme
 
 # Direct Commands
+switch-theme oled slate           # OLED Pure Black + Slate Neutral (Ardósia)
 switch-theme oled purple          # OLED Pure Black + Purple
 switch-theme oled green           # OLED Pure Black + Emerald Green
 switch-theme transparent amber    # Glass Translucent + Amber
@@ -77,11 +78,11 @@ switch-theme original blue        # Classic One Dark + Sapphire Blue
 
 #### 2. Via GNOME Tweaks (Ajustes)
 1. Open **GNOME Tweaks** -> **Appearance**.
-2. Select your desired theme under **Shell** and **Legacy Applications** (e.g. `Aura-One-OLED-Purple`).
+2. Select your desired theme under **Shell** and **Legacy Applications** (e.g. `Aura-One-OLED-Slate` or `Aura-One-OLED-Purple`).
 3. The background daemon will automatically sync Nautilus, Settings, and all GTK apps in real time!
 
 #### 3. Via GNOME Settings (Configurações)
-When using the adaptive base versions (`Aura-One-OLED`, `Aura-One-Darker`, etc.), opening **GNOME Settings** -> **Appearance** and clicking any accent color will recolor the Shell, Nautilus, and all apps simultaneously.
+When using the adaptive base versions (`Aura-One-OLED`, `Aura-One-Darker`, etc.), opening **GNOME Settings** -> **Appearance** and clicking any accent color (including Slate) will recolor the Shell, Nautilus, and all apps simultaneously.
 
 ---
 
@@ -111,7 +112,7 @@ O **Aura One** é uma suite de temas escuros moderna e unificada desenvolvida pa
 * 🌘 **Modo One Dark Original**: Visual clássico One Dark balanceado (`#282c34` / `#323742`).
 * 🪟 **Modo Glass Translúcido**: Efeito vidro fumê refinado (80% ~ 88% de opacidade) com desfoque (*blur*) suave para uso com a extensão *Blur My Shell*.
 * ⚡ **Sincronização Instantânea (<20ms)**: Inclui um daemon leve em segundo plano (`aura-theme-daemon`) com **0% de uso de CPU** que sincroniza alterações do GNOME Tweaks e Configurações diretamente com o Nautilus e todos os apps abertos no mesmo instante.
-* 🎨 **36 Variações de Cores Prontas**: Pacotes pré-configurados com 8 cores de destaque (Roxo, Verde, Azul, Laranja, Vermelho, Ciano, Âmbar, Rosa) e modo Dinâmico GNOME.
+* 🎨 **40 Variações de Cores Prontas**: Pacotes pré-configurados com as 9 cores oficiais do GNOME (Ardósia/Slate, Roxo, Verde, Azul, Laranja, Vermelho, Ciano, Âmbar, Rosa) e modo Dinâmico GNOME.
 * 💻 **Ferramenta CLI Completa (`switch-theme`)**: Alterne temas e cores pelo terminal com facilidade ou abra o menu interativo com suporte a qualquer código HEX!
 
 ---
@@ -137,6 +138,7 @@ chmod +x install.sh
 switch-theme
 
 # Comandos diretos
+switch-theme oled slate           # Fundo OLED + Ardósia Neutro
 switch-theme oled purple          # Fundo OLED + Roxo
 switch-theme oled green           # Fundo OLED + Verde Esmeralda
 switch-theme transparent amber    # Fundo Translúcido + Âmbar
@@ -144,7 +146,7 @@ switch-theme darker #ff007f       # Fundo Darker + Cor HEX customizada
 ```
 
 #### 2. Pelo GNOME Tweaks (Ajustes)
-Abra o **Ajustes** -> **Aparência** -> selecione qualquer uma das variações (ex: `Aura-One-OLED-Green`). O Nautilus e todos os programas mudarão de cor na mesma hora.
+Abra o **Ajustes** -> **Aparência** -> selecione qualquer uma das variações (ex: `Aura-One-OLED-Slate`). O Nautilus e todos os programas mudarão de cor na mesma hora.
 
 ---
 

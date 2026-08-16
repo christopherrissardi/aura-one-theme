@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-OLED-Slate
+Comment=Aura One OLED Pure Black com destaque Ardósia Neutro
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-OLED-Slate
+MetacityTheme=Aura-One-OLED-Slate
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

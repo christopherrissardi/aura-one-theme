@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-Dark-Slate
+Comment=Aura One One Dark Original com destaque Ardósia Neutro
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-Dark-Slate
+MetacityTheme=Aura-One-Dark-Slate
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu
