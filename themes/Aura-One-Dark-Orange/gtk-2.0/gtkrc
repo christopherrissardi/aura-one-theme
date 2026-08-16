@@ -1,0 +1,18 @@
+# Based on Aura-One-Dark Laranja Sunset
+gtk-color-scheme = "text_color:white\nbase_color:#21252b"
+gtk-color-scheme = "fg_color:#eeeeec\nbg_color:#282c34"
+gtk-color-scheme = "selected_fg_color:#ffffff\nselected_bg_color:#ff7800"
+gtk-color-scheme = "insensitive_fg_color:#7e8799\ninsensitive_bg_color:#2d323b"
+gtk-color-scheme = "menu_color:#323742"
+gtk-color-scheme = "link_color:#ff9340\nvisited_link_color:#ff7800"
+gtk-color-scheme = "column_header_color:#898b8b\nhover_column_header_color:#bcbdbc"
+gtk-color-scheme = "window_color:#323742"
+gtk-color-scheme = "tooltip_fg_color:#ffffff\ntooltip_bg_color:#3a404b"
+
+gtk-auto-mnemonics              = 1
+gtk-primary-button-warps-slider = 1
+
+include "main.rc"
+include "apps.rc"
+include "hacks.rc"
+include "hacks-dark.rc"

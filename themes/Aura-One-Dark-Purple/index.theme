@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-Dark-Purple
+Comment=Aura One One Dark Original com destaque Roxo Ametista
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-Dark-Purple
+MetacityTheme=Aura-One-Dark-Purple
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

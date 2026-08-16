@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-OLED-Teal
+Comment=Aura One OLED Pure Black com destaque Ciano Teal
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-OLED-Teal
+MetacityTheme=Aura-One-OLED-Teal
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

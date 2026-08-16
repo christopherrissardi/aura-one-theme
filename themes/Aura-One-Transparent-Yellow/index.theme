@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-Transparent-Yellow
+Comment=Aura One Transparent Glass com destaque Âmbar Dourado
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-Transparent-Yellow
+MetacityTheme=Aura-One-Transparent-Yellow
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

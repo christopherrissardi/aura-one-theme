@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""
+Aura Theme Sync Daemon
+Automatically synchronizes GNOME Shell Theme, GTK Themes, Accent Colors,
+and Libadwaita / GTK4 / GTK3 configs (Nautilus, Settings, etc.) in real time.
+
+Supports all 36 Aura-One theme variations (OLED, Darker, Dark, Transparent x All Accent Colors).
+"""
+
+import os
+import sys
+import time
+import subprocess
+import gi
+
+gi.require_version('Gio', '2.0')
+from gi.repository import Gio, GLib
+
+ACCENT_MAP = {
+    "blue": "blue",
+    "purple": "purple",
+    "green": "green",
+    "orange": "orange",
+    "red": "red",
+    "teal": "teal",
+    "yellow": "yellow",
+    "pink": "pink",
+}
+
+class ThemeSyncDaemon:
+    def __init__(self):
+        self.settings_shell = Gio.Settings.new('org.gnome.shell.extensions.user-theme')
+        self.settings_interface = Gio.Settings.new('org.gnome.desktop.interface')
+        self.is_syncing = False
+
+        # Connect signals
+        self.settings_shell.connect('changed::name', self.on_shell_theme_changed)
+        self.settings_interface.connect('changed::gtk-theme', self.on_gtk_theme_changed)
+        self.settings_interface.connect('changed::accent-color', self.on_accent_changed)
+
+        print("[AuraSync] Daemon iniciado com suporte a todas as 36 variações do Aura-One.")
+        self.sync_current_state()
+
+    def is_aura_theme(self, theme_str):
+        if not theme_str:
+            return False
+        clean = theme_str.strip("'")
+        return clean.startswith("Aura-One")
+
+    def restore_default_system_theme(self):
+        """Restores stock GNOME appearance by removing custom GTK CSS overrides."""
+        for conf_dir in ["~/.config/gtk-4.0", "~/.config/gtk-3.0"]:
+            target_css = os.path.expanduser(f"{conf_dir}/gtk.css")
+            if os.path.exists(target_css) or os.path.islink(target_css):
+                try:
+                    os.remove(target_css)
+                except Exception:
+                    pass
+
+        gtk2_rc = os.path.expanduser("~/.gtkrc-2.0")
+        if os.path.exists(gtk2_rc):
+            try:
+                os.remove(gtk2_rc)
+            except Exception:
+                pass
+
+        # Trigger instant reload on all apps to native defaults
+        self.pulse_gtk_theme("Adwaita")
+        print("[AuraSync] Tema padrão do sistema detectado. Configurações restauradas para o padrão nativo do GNOME.")
+
+    def pulse_gtk_theme(self, final_theme_id):
+        """
+        Forces all running GTK4/Libadwaita apps (Nautilus, Settings, etc.)
+        and GTK3 apps to immediately invalidate their CSS cache and redraw in <20ms.
+        """
+        self.is_syncing = True
+        try:
+            # Emit micro-toggle on gtk-theme
+            self.settings_interface.set_string('gtk-theme', '')
+            self.settings_interface.set_string('gtk-theme', final_theme_id)
+        except Exception:
+            pass
+        finally:
+            self.is_syncing = False
+
+    def apply_aura_theme(self, theme_id):
+        theme_path = os.path.expanduser(f"~/.local/share/themes/{theme_id}")
+        source_css = os.path.join(theme_path, "gtk-4.0", "gtk.css")
+
+        if not os.path.exists(source_css):
+            print(f"[AuraSync] Tema '{theme_id}' não encontrado em {theme_path}")
+            return
+
+        with open(source_css, "r") as f:
+            css_content = f.read()
+
+        # Update gtk-4.0 and gtk-3.0 configs
+        for conf_dir in ["~/.config/gtk-4.0", "~/.config/gtk-3.0"]:
+            full_dir = os.path.expanduser(conf_dir)
+            os.makedirs(full_dir, exist_ok=True)
+            target_css = os.path.join(full_dir, "gtk.css")
+            try:
+                if os.path.islink(target_css):
+                    os.remove(target_css)
+                with open(target_css, "w") as f:
+                    f.write(css_content)
+                    f.flush()
+                    os.fsync(f.fileno())
+                os.utime(target_css, None)
+            except Exception as e:
+                print(f"[AuraSync] Erro ao gravar {target_css}: {e}")
+
+        # Update GTK 2 (Legacy Apps)
+        gtk2_rc = os.path.expanduser("~/.gtkrc-2.0")
+        theme_gtkrc = os.path.join(theme_path, "gtk-2.0", "gtkrc")
+        if os.path.exists(theme_gtkrc):
+            try:
+                with open(gtk2_rc, "w") as f:
+                    f.write(f'include "{theme_gtkrc}"\n')
+            except Exception:
+                pass
+
+        # If theme specifies a color (e.g. Aura-One-OLED-Purple), sync GNOME accent-color
+        parts = theme_id.split("-")
+        if len(parts) >= 4:
+            color_part = parts[-1].lower()
+            if color_part in ACCENT_MAP:
+                gnome_accent = ACCENT_MAP[color_part]
+                curr_accent = self.settings_interface.get_string('accent-color').strip("'")
+                if curr_accent != gnome_accent:
+                    try:
+                        self.settings_interface.set_string('accent-color', gnome_accent)
+                    except Exception:
+                        pass
+
+        # Trigger instant reload across all running apps
+        self.pulse_gtk_theme(theme_id)
+        print(f"[AuraSync] ✓ Recarregamento instantâneo concluído para '{theme_id}'")
+
+    def sync_current_state(self):
+        shell_theme = self.settings_shell.get_string('name').strip("'")
+        gtk_theme = self.settings_interface.get_string('gtk-theme').strip("'")
+
+        if self.is_aura_theme(shell_theme):
+            self.apply_aura_theme(shell_theme)
+        elif self.is_aura_theme(gtk_theme):
+            self.apply_aura_theme(gtk_theme)
+        else:
+            self.restore_default_system_theme()
+
+    def on_shell_theme_changed(self, settings, key):
+        if self.is_syncing:
+            return
+        theme_id = settings.get_string(key).strip("'")
+        print(f"[AuraSync] Ajustes (Tema do Shell): '{theme_id}'")
+
+        if self.is_aura_theme(theme_id):
+            self.is_syncing = True
+            try:
+                curr_gtk = self.settings_interface.get_string('gtk-theme').strip("'")
+                if curr_gtk != theme_id:
+                    self.settings_interface.set_string('gtk-theme', theme_id)
+                self.apply_aura_theme(theme_id)
+            finally:
+                self.is_syncing = False
+        else:
+            self.restore_default_system_theme()
+
+    def on_gtk_theme_changed(self, settings, key):
+        if self.is_syncing:
+            return
+        theme_id = settings.get_string(key).strip("'")
+        print(f"[AuraSync] Ajustes (Tema GTK/Legado): '{theme_id}'")
+
+        if self.is_aura_theme(theme_id):
+            self.is_syncing = True
+            try:
+                curr_shell = self.settings_shell.get_string('name').strip("'")
+                if curr_shell != theme_id:
+                    self.settings_shell.set_string('name', theme_id)
+                self.apply_aura_theme(theme_id)
+            finally:
+                self.is_syncing = False
+        else:
+            self.restore_default_system_theme()
+
+    def on_accent_changed(self, settings, key):
+        accent_name = settings.get_string(key).strip("'")
+        print(f"[AuraSync] Configurações do GNOME (Cor de Destaque): '{accent_name}'")
+        shell_theme = self.settings_shell.get_string('name').strip("'")
+        if self.is_aura_theme(shell_theme):
+            self.apply_aura_theme(shell_theme)
+
+def main():
+    daemon = ThemeSyncDaemon()
+    loop = GLib.MainLoop()
+    try:
+        loop.run()
+    except (KeyboardInterrupt, SystemExit):
+        print("\n[AuraSync] Daemon finalizado.")
+
+if __name__ == '__main__':
+    main()

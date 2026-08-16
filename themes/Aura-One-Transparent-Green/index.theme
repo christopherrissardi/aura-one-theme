@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-Transparent-Green
+Comment=Aura One Transparent Glass com destaque Verde Esmeralda
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-Transparent-Green
+MetacityTheme=Aura-One-Transparent-Green
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

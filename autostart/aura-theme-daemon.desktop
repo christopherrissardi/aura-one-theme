@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Aura One Theme Sync Daemon
+Comment=Synchronizes GNOME Shell, Tweaks, and Libadwaita in real time
+Exec=/usr/bin/python3 %h/.local/bin/aura-theme-daemon
+Hidden=false
+NoDisplay=true
+X-GNOME-Autostart-enabled=true
+StartupNotify=false
+Terminal=false

@@ -1,0 +1,12 @@
+# OS / Editor temporary files
+.DS_Store
+*.swp
+*~
+*.bak
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log

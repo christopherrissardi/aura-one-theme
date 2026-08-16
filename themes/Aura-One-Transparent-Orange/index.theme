@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-Transparent-Orange
+Comment=Aura One Transparent Glass com destaque Laranja Sunset
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-Transparent-Orange
+MetacityTheme=Aura-One-Transparent-Orange
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

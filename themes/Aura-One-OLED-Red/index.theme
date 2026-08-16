@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-OLED-Red
+Comment=Aura One OLED Pure Black com destaque Vermelho Carmesim
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-OLED-Red
+MetacityTheme=Aura-One-OLED-Red
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

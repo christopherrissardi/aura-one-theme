@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-OLED-Purple
+Comment=Aura One OLED Pure Black com destaque Roxo Ametista
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-OLED-Purple
+MetacityTheme=Aura-One-OLED-Purple
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu

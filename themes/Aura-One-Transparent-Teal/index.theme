@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aura-One-Transparent-Teal
+Comment=Aura One Transparent Glass com destaque Ciano Teal
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aura-One-Transparent-Teal
+MetacityTheme=Aura-One-Transparent-Teal
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=close,minimize,maximize:menu
