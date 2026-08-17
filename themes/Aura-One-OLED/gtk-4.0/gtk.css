@@ -173,13 +173,13 @@
 .nautilus-window viewport,
 .nautilus-window columnview,
 .nautilus-window .content-view {
-  background-color: #0a0b0d !important;
+  background-color: #0a0b0d;
 }
 
 .nautilus-window headerbar,
 .nautilus-window .navigation-sidebar,
 .nautilus-window placessidebar,
 .nautilus-window .sidebar-pane {
-  background-color: #141518 !important;
+  background-color: #141518;
 }
 
