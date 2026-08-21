@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
 Aura Theme Sync Daemon (Rock-Solid Edition)
-Automatically synchronizes GNOME Shell Theme, GTK Themes, Accent Colors,
-and Libadwaita / GTK4 / GTK3 configs (Nautilus, Settings, etc.) in real time.
+Automatically synchronizes GNOME Shell Theme, Accent Colors,
+and Libadwaita / GTK4 configs (Nautilus, Settings, etc.) in real time,
+while preserving default Adwaita for legacy GTK applications to prevent
+unwanted transparency and rendering bugs in Firefox, FileZilla, FDM, etc.
 
 Features:
 - Full persistence across reboots with zero race conditions.
 - Sychronizes all 40 Aura-One variations (OLED, Darker, Dark, Transparent x Accents).
-- Robust state-machine that prevents signal ping-pong and false restores.
+- Preserves native Adwaita for legacy GTK 2/3 apps.
 - Zero CPU usage via native GSettings D-Bus monitors.
 """
 
@@ -42,10 +44,9 @@ class ThemeSyncDaemon:
 
         # Connect signals
         self.settings_shell.connect('changed::name', self.on_shell_theme_changed)
-        self.settings_interface.connect('changed::gtk-theme', self.on_gtk_theme_changed)
         self.settings_interface.connect('changed::accent-color', self.on_accent_changed)
 
-        print("[AuraSync] Daemon iniciado com persistência total para reinicialização.")
+        print("[AuraSync] Daemon iniciado com sincronização de Shell e Libadwaita.")
         # Perform initial synchronization on startup
         self.sync_current_state()
 
@@ -87,21 +88,28 @@ class ThemeSyncDaemon:
         with open(source_css, "r") as f:
             css_content = f.read()
 
-        # Update gtk-4.0 and gtk-3.0 configs directly
-        for conf_dir in ["~/.config/gtk-4.0", "~/.config/gtk-3.0"]:
-            full_dir = os.path.expanduser(conf_dir)
-            os.makedirs(full_dir, exist_ok=True)
-            target_css = os.path.join(full_dir, "gtk.css")
+        # Update gtk-4.0 config for Libadwaita apps (Nautilus, Settings, etc.)
+        conf_dir = os.path.expanduser("~/.config/gtk-4.0")
+        os.makedirs(conf_dir, exist_ok=True)
+        target_css = os.path.join(conf_dir, "gtk.css")
+        try:
+            if os.path.islink(target_css):
+                os.remove(target_css)
+            with open(target_css, "w") as f:
+                f.write(css_content)
+                f.flush()
+                os.fsync(f.fileno())
+            os.utime(target_css, None)
+        except Exception as e:
+            print(f"[AuraSync] Erro ao gravar {target_css}: {e}")
+
+        # Clean up ~/.config/gtk-3.0/gtk.css so GTK 3 legacy apps use clean Adwaita
+        gtk3_css = os.path.expanduser("~/.config/gtk-3.0/gtk.css")
+        if os.path.exists(gtk3_css) or os.path.islink(gtk3_css):
             try:
-                if os.path.islink(target_css):
-                    os.remove(target_css)
-                with open(target_css, "w") as f:
-                    f.write(css_content)
-                    f.flush()
-                    os.fsync(f.fileno())
-                os.utime(target_css, None)
-            except Exception as e:
-                print(f"[AuraSync] Erro ao gravar {target_css}: {e}")
+                os.remove(gtk3_css)
+            except Exception:
+                pass
 
         # Update GTK 2 (Legacy Apps)
         gtk2_rc = os.path.expanduser("~/.gtkrc-2.0")
@@ -118,10 +126,13 @@ class ThemeSyncDaemon:
         # Sync GSettings under internal guard
         self.is_internal_update = True
         try:
-            # Sync GTK theme
+            # Keep Legacy GTK apps on Adwaita (Default)
             curr_gtk = self.settings_interface.get_string('gtk-theme').strip("'")
-            if curr_gtk != clean_theme_id:
-                self.settings_interface.set_string('gtk-theme', clean_theme_id)
+            if curr_gtk != 'Adwaita' and not self.is_aura_theme(curr_gtk):
+                # User has another custom legacy theme set, keep it
+                pass
+            elif curr_gtk != 'Adwaita':
+                self.settings_interface.set_string('gtk-theme', 'Adwaita')
 
             # Sync Shell theme
             curr_shell = self.settings_shell.get_string('name').strip("'")
@@ -142,20 +153,15 @@ class ThemeSyncDaemon:
         finally:
             self.is_internal_update = False
 
-        print(f"[AuraSync] ✓ Tema '{clean_theme_id}' aplicado com sucesso em todo o sistema.")
+        print(f"[AuraSync] ✓ Tema '{clean_theme_id}' sincronizado com Shell e GTK4. Apps legados mantidos em Adwaita.")
 
     def sync_current_state(self):
         shell_theme = self.settings_shell.get_string('name').strip("'").strip()
-        gtk_theme = self.settings_interface.get_string('gtk-theme').strip("'").strip()
-
-        print(f"[AuraSync] Inicializando estado: Shell='{shell_theme}', GTK='{gtk_theme}'")
+        print(f"[AuraSync] Inicializando estado: Shell='{shell_theme}'")
 
         if self.is_aura_theme(shell_theme):
             self.apply_aura_theme(shell_theme)
-        elif self.is_aura_theme(gtk_theme):
-            self.apply_aura_theme(gtk_theme)
         else:
-            # Check if gtk.css exists; if not, keep stock
             target_css = os.path.expanduser("~/.config/gtk-4.0/gtk.css")
             if not os.path.exists(target_css):
                 self.restore_default_system_theme()
@@ -169,22 +175,7 @@ class ThemeSyncDaemon:
         if self.is_aura_theme(theme_id):
             self.apply_aura_theme(theme_id)
         else:
-            gtk_theme = self.settings_interface.get_string('gtk-theme').strip("'").strip()
-            if not self.is_aura_theme(gtk_theme):
-                self.restore_default_system_theme()
-
-    def on_gtk_theme_changed(self, settings, key):
-        if self.is_internal_update:
-            return
-        theme_id = settings.get_string(key).strip("'").strip()
-        print(f"[AuraSync] Evento: Tema GTK alterado para '{theme_id}'")
-
-        if self.is_aura_theme(theme_id):
-            self.apply_aura_theme(theme_id)
-        else:
-            shell_theme = self.settings_shell.get_string('name').strip("'").strip()
-            if not self.is_aura_theme(shell_theme):
-                self.restore_default_system_theme()
+            self.restore_default_system_theme()
 
     def on_accent_changed(self, settings, key):
         if self.is_internal_update:

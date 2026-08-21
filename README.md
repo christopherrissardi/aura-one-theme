@@ -9,7 +9,7 @@
 [![GTK4 / Libadwaita](https://img.shields.io/badge/GTK4-Libadwaita-purple.svg)](https://gitlab.gnome.org/GNOME/libadwaita)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/christopherrissardi)
 
-[English 🇺🇸](#-english) • [Português 🇧🇷](#-português)
+[English 🇺🇸](#-english) • [Português 🇧🇷](#-português) • [Changelog 📝](CHANGELOG.md)
 
 ---
 

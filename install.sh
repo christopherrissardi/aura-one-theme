@@ -27,7 +27,7 @@ if ! command -v python3 >/dev/null 2>&1; then
 fi
 
 # 2. Install Themes
-echo -e "${YELLOW}[1/4] Installing 36 Aura-One themes into ~/.local/share/themes/...${NC}"
+echo -e "${YELLOW}[1/4] Installing 40 Aura-One themes into ~/.local/share/themes/...${NC}"
 mkdir -p "$HOME/.local/share/themes"
 cp -a "$SCRIPT_DIR/themes/"* "$HOME/.local/share/themes/"
 echo -e "${GREEN}  ✓ Themes installed successfully.${NC}\n"
